@@ -1,0 +1,30 @@
+{
+  "name": "project_5-1_neighborhoodmaps",
+  "authors": [
+    "Jake Bryan <BryanJ4@Linux.com>"
+  ],
+  "description": "You will develop a single page application featuring a map of your neighborhood or a neighborhood you would like to visit. You will then add additional functionality to this map including highlighted locations, third-party data about those locations and various ways to browse the content.",
+  "main": "index.html",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/bryanj4",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  },
+  "dependencies": {
+    "knockout": "knockoutjs#^3.4.0",
+    "jquery": "^2.2.0",
+    "polymer": "^1.2.4",
+    "underscore": "^1.8.3"
+  }
+}

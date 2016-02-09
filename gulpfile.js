@@ -17,27 +17,27 @@ var gulp = require('gulp'),
 
 // Paths to various files
 var paths = {
-    scripts: ['js/*.js','bower_components/jquery/dist/jquery.js'],
-    styles: ['scss/style.scss','scss/styles/*.scss'],
-    images: ['image/**/*'],
+    scripts: ['src/js/**/*.js', 'src/js/*.js'],
+    styles: ['src/scss/style.scss','src/scss/styles/*.scss'],
+    images: ['src/img/image/**/*'],
     icons: ['src/img/icons/*.svg'],
-    content: ['index.html']
+    content: ['src/index.html']
 };
 
-// Compiles scss files and outputs them to build/css/*.css
+// Compiles scss files and outputs them to dist/css/*.css
 gulp.task('styles', function(){
     return gulp.src(paths.stylesheets)
                 .pipe(sass().on('error', sass.logError))
-                .pipe(gulp.dest('./build/css'));
+                .pipe(gulp.dest('./dist/css'));
 });
 
-// Compiles scss files and outputs them to build/css/*.min.css
+// Compiles scss files and outputs them to dist/css/*.min.css
 /*gulp.task('stylesMin', function () {
     return gulp.src(paths.stylesheets)
                 .pipe(sass({outputStyle: 'compressed'}).)
 });*/
 
-// Concats & minifies js files and outputs them to build/js/app.js
+// Concats & minifies js files and outputs them to dist/js/app.js
 gulp.task('scripts', function() {
     return gulp.src(paths.scripts)
         .pipe(plumber())
@@ -46,26 +46,26 @@ gulp.task('scripts', function() {
             .pipe(concatify('app.js'))
         .pipe(sourcemaps.write())
         .pipe(plumber.stop())
-        .pipe(gulp.dest('./build/js/'));
+        .pipe(gulp.dest('./dist/js/'));
 });
 
-// Minifies our HTML files and outputs them to build/*.html
+// Minifies our HTML files and outputs them to dist/*.html
 gulp.task('content', function() {
     return gulp.src(paths.content)
         .pipe(minifyhtml({
             empty: true,
             quotes: true
         }))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./dist'));
 });
 
-// Optimizes our image files and outputs them to build/image/*
+// Optimizes our image files and outputs them to dist/image/*
 gulp.task('images', function() {
     return gulp.src(paths.images)
                 .pipe(imageop({
                     optimizationLevel: 5
                 }))
-                .pipe(gulp.dest('./build/image'));
+                .pipe(gulp.dest('./dist/img/image'));
 });
 
 
@@ -88,7 +88,7 @@ gulp.task('svgstore', function(){
 
     return gulp.src(paths.content)
                 .pipe(inject(svgs, { transform: fileContents }))
-                .pipe(gulp.dest('build'));
+                .pipe(gulp.dest('dist'));
 });
 
 // Watches for changes to our files and executes required scripts
@@ -102,7 +102,7 @@ gulp.task('browse', function(){
     browserSync({
         port: 3030,
         server: {
-            baseDir: "./build"
+            baseDir: "./dist"
         }
     });
 

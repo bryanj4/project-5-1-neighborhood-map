@@ -18,13 +18,10 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "gulp": "^3.9.0"
-  },
   "dependencies": {
     "knockout": "knockoutjs#^3.4.0",
     "jquery": "^2.2.0",
-    "polymer": "^1.2.4",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "bootstrap": "^3.3.6"
   }
 }

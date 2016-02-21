@@ -26,7 +26,7 @@ var paths = {
 
 // Compiles scss files and outputs them to dist/css/*.css
 gulp.task('styles', function(){
-    return gulp.src(paths.stylesheets)
+    return gulp.src(paths.styles)
                 .pipe(sass().on('error', sass.logError))
                 .pipe(gulp.dest('./dist/css'));
 });

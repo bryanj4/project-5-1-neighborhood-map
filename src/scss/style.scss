@@ -1,0 +1,22 @@
+$icon-font-path: "/bower_components/bootstrap-sass/assets/fonts/bootstrap/";
+
+@import 'bower_components/bootstrap-sass/assets/stylesheets/bootstrap.scss';
+
+$info_text: grey;
+$header_text: #000;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#info-container {
+  background-color: $info_text;
+}
+
+#map-rome {
+  height: 90%;
+  font-size: 48px;
+  color: $header_text;
+}

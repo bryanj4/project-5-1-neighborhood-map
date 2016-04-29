@@ -1,0 +1,148 @@
+{
+    "rome-app": [ {
+    "name": "Colosseum",
+    "address": ["Piazza del Colosseo, Rome, Italy"],
+    "website": "http://www.coopculture.it/en/the-colosseum.cfm",
+    "wiki": "https://en.wikipedia.org/wiki/Colosseum",
+    "type": 0,
+    "keywords": [
+        "gladiator",
+        "fight",
+        "ring",
+        "games",
+        "sport"
+    ]
+    }, {
+    "name": "Pantheon",
+    "address": ["Piazza della Rotonda Rome, Italy"],
+    "website": "http://www.turismoroma.it/cosa-fare/pantheon?lang=en",
+    "wiki": "https://en.wikipedia.org/wiki/Pantheon,_Rome",
+    "type": 4,
+    "keywords": [
+        "church",
+        "dome",
+        "temple"
+    ]
+    }, {
+    "name": "St. Peter's Basilica",
+    "address": ["Piazza San Pietro, 00120 Città del Vaticano, Vatican City"],
+    "website": "http://www.vaticanstate.va/content/vaticanstate/en/monumenti/basilica-di-s-pietro.html",
+    "wiki": "https://en.wikipedia.org/wiki/St._Peter%27s_Basilica",
+    "type": 4,
+    "keywords": [
+        "church",
+        "basilica",
+        "vatican",
+        "pope",
+        "peter",
+        "saint"
+    ]
+    }, {
+    "name": "Piramide Cestia",
+    "address": ["Via Raffaele Persichetti, 00153 Roma, Italy"],
+    "website": "http://www.coopculture.it/en/heritage.cfm?id=59",
+    "wiki": "https://en.wikipedia.org/wiki/Pyramid_of_Cestius",
+    "type": 0,
+    "keywords": [
+        "pyramid",
+        "gaius",
+        "cestius",
+        "tomb",
+        "ruins"
+    ]
+    }, {
+    "name": "Underground Basilica of Porta Maggiore",
+    "address": ["Piazzale Labicano angolo via Prenestina, Via Prenestina, Roma, Italy"],
+    "website": "http://archeoroma.beniculturali.it/en/archaeological-site/underground-basilica-near-porta-maggiore",
+    "wiki": "https://en.wikipedia.org/wiki/Underground_basilica_of_Porta_Maggiore",
+    "type": 0,
+    "keywords": [
+        "basilica",
+        "underground",
+        "neopythagoreans"
+    ]
+    }, {
+    "name": "Palazzo Delle Esposizioni",
+    "address": ["Via Nazionale, 194, 00184 Roma, Italy"],
+    "website": "http://english.palazzoesposizioni.it/Home.aspx",
+    "wiki": "https://en.wikipedia.org/wiki/Palazzo_delle_Esposizioni",
+    "type": 0,
+    "keywords": [
+        "exhibition",
+        "hall",
+        "cultural",
+        "center",
+        "museum"
+    ]
+    }, {
+    "name": "Roman Forum",
+    "address": ["Via della Salara Vecchia, 5/6, Roma, Italy"],
+    "website": "http://www.coopculture.it/en/heritage.cfm?id=4",
+    "wiki": "https://en.wikipedia.org/wiki/Palatine_Hill",
+    "type": 0,
+    "keywords": [
+        "palatine",
+        "hill",
+        "forum",
+        "ruins",
+        "ancient",
+        "rome"
+    ]
+    }, {
+    "name": "Tourist Information Centers",
+    "address": [
+        "Via Giovanni Giolitti 34, Roma, Italy",
+        "Via di San Basilio 51, Roma, Italy",
+        "Palazzo delle Esposizioni, Roma, Italy",
+        "Via dei Fori Imperiali, Roma, Italy"
+    ],
+    "website": "http://www.turismoroma.it/info_viaggio/pit",
+    "wiki": "none",
+    "type": 1,
+    "keywords": [
+        "information",
+        "center",
+        "pit",
+        "point"
+    ]
+    }, {
+    "name":"Leonardo da Vinci–Fiumicino Airport",
+    "address":["Via dell' Aeroporto di Fiumicino, 320, 00054 Fiumicino RM, Italy"],
+    "website":"http://www.adr.it/fiumicino",
+    "wiki":"https://en.wikipedia.org/wiki/Leonardo_da_Vinci%E2%80%93Fiumicino_Airport",
+    "type": 3,
+    "keywords": [
+        "airport",
+        "ryanair",
+        "fiumicino",
+        "neos",
+        "alitalia",
+        "airplanes"
+    ]
+    }, {
+    "name":"Termini Station",
+    "address": ["Roma Termini, Italy"],
+    "website":"http://www.trenitalia.com/tcom-en",
+    "wiki":"https://en.wikipedia.org/wiki/Roma_Termini_railway_station",
+    "type": 3,
+    "keywords": [
+        "trains",
+        "station",
+        "choo"
+    ]
+    }, {
+    "name": "Trevi Fountain",
+    "address": ["Piazza di Trevi, 00187 Roma, Italy"],
+    "website": "http://www.trevifountain.net/",
+    "wiki": "https://en.wikipedia.org/wiki/Trevi_Fountain",
+    "type": 0,
+    "keywords": [
+        "trevi",
+        "fountain",
+        "wish",
+        "salvi",
+        "bracci"
+    ]
+    }
+  ]
+}

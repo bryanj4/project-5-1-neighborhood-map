@@ -5825,7 +5825,7 @@ html, body {
 #info-container {
   background-color: grey; }
 
-#map-rome {
-  height: 90%;
+#romeMap {
+  height: 100%;
   font-size: 48px;
   color: #000; }

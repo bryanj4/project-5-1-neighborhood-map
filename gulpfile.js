@@ -9,18 +9,15 @@ var gulp = require('gulp'),
     concatify = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
     imageop = require('gulp-image-optimization'),
-    svgstore = require('gulp-svgstore'),
-    svgmin = require('gulp-svgmin'),
     inject = require('gulp-inject'),
     cheerio = require('gulp-cheerio'),
     minifyhtml = require('gulp-minify-html');
 
 // Paths to various files
 var paths = {
-    scripts: ['src/js/**/*.js', 'src/js/*.js'],
+    scripts: ['src/js/*.js', 'bower_components/jquery/dist/jquery.js', 'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js', 'bower_components/knockout/dist/knockout.js', 'bower_components/sammy/lib/sammy.js', 'bower_components/underscore/underscore.js'],
     styles: ['src/scss/style.scss'],
     images: ['src/img/image/**/*'],
-    icons: ['src/img/icons/*.svg'],
     content: ['src/index.html']
 };
 
@@ -43,7 +40,7 @@ gulp.task('scripts', function() {
         .pipe(plumber())
         .pipe(sourcemaps.init())
             .pipe(uglify())
-            .pipe(concatify('app.js'))
+            .pipe(concatify('appd.js'))
         .pipe(sourcemaps.write())
         .pipe(plumber.stop())
         .pipe(gulp.dest('./dist/js/'));
@@ -62,39 +59,14 @@ gulp.task('content', function() {
 // Optimizes our image files and outputs them to dist/image/*
 gulp.task('images', function() {
     return gulp.src(paths.images)
-                .pipe(imageop({
-                    optimizationLevel: 5
-                }))
                 .pipe(gulp.dest('./dist/img/image'));
 });
 
 
-//Optimizes and inlines SVG images for manipulation
-gulp.task('svgstore', function(){
-    var svgs = gulp.src(paths.icons)
-                    .pipe(cheerio({
-                        run: function($) {
-                            $('[fill]').removeAttr('fill');
-                            $('path').addClass('social-icon-path');
-                        },
-                        parserOptions: { xmlMode: true}
-                    }))
-                    .pipe(svgmin())
-                    .pipe(svgstore({inlineSvg: true}));
-
-    function fileContents(filePath, file) {
-        return file.contents.toString();
-    }
-
-    return gulp.src(paths.content)
-                .pipe(inject(svgs, { transform: fileContents }))
-                .pipe(gulp.dest('dist'));
-});
-
 // Watches for changes to our files and executes required scripts
 gulp.task('scss-watch', ['styles'], browserSync.reload);
-gulp.task('content-watch', ['svgstore','content'], browserSync.reload);
-gulp.task('image-watch', ['images', 'svgstore'], browserSync.reload);
+gulp.task('content-watch', ['content'], browserSync.reload);
+gulp.task('image-watch', ['images'], browserSync.reload);
 gulp.task('script-watch', ['scripts'], browserSync.reload);
 
 // Launches a test webserver
@@ -107,10 +79,9 @@ gulp.task('browse', function(){
     });
 
     gulp.watch(paths.scripts, ['script-watch']);
-    gulp.watch(paths.stylesheets, ['scss-watch']);
+    gulp.watch(paths.styles, ['scss-watch']);
     gulp.watch(paths.content, ['content-watch']);
     gulp.watch(paths.images, ['image-watch']);
-    gulp.watch(paths.icons, ['image-watch']);
 });
 
-gulp.task('serve', ['scripts', 'styles','images', 'svgstore', 'content', 'browse']);
+gulp.task('serve', ['scripts', 'styles','images', 'content', 'browse']);

@@ -337,22 +337,22 @@ function MainViewModel(jsonFile) {
     });
     self.latLngFinder = new google.maps.Geocoder();
     // TODO: Create ObservableArray of each Location from the jsonFile
-    self.Locale = Location(jsonFile['rome-app'][0],self.map);
+    self.locale = new Location(jsonFile['rome-app'][0],self.map);
 
     // for (var i = self.Locations.length - 1; i >= 0; i--) {
     //     self.Locations[i].wikiGet();
     // }
     console.log("before wikiGet()");
-    self.Locale.wikiGet(self.latLngFinder);
+    self.locale.wikiGet(self.latLngFinder);
     console.log("after wikiGet()");
 
     self.setView = function (view) {
         if (true) {
             var bounds = new google.maps.LatLngBounds();
-            for (var y = self.Locale.markers.length - 1; y >= 0; y--) {
-                bounds.extend(self.Locale.markers[y].position);
+            for (var y = self.locale.markers.length - 1; y >= 0; y--) {
+                bounds.extend(self.locale.markers[y].position);
             }
-            self.Locale.isVisible(true);
+            self.locale.isVisible(true);
             self.map.fitBounds(bounds);
         }
     };

@@ -182,12 +182,12 @@ function fixerio_api(currencies) {
     });
 }
 
-var Location = function( initData , marker) {
+var Location = function( initData , map) {
     var self = this;
-    self.name =  initData.name || '' ;
-    self.address = initData.address || [""] ;
-    self.wiki = initData.wiki || '' ;
-    self.type = initData.type || 5;
+    self.name =  ko.observable(initData.name || '') ;
+    self.address = ko.observableArray(initData.address || []);
+    self.wiki = ko.observable(initData.wiki || '') ;
+    self.type = ko.observable(initData.type || 5);
                                     /* 0 - Historical Marker
                                        1 - Information Center
                                        2 - Restaurant
@@ -195,39 +195,95 @@ var Location = function( initData , marker) {
                                        4 - Church
                                        5 - Other
                                      */
-    self.website = initData.website || '';
-    self.keywords = initData.keywords || [];
-    self.visible = true;
-    self.marker = marker; // TODO: will be Marker object
-    self.wikiDisplay = "";
+    self.website = ko.observable(initData.website || '');
+    self.keywords = ko.observable(initData.keywords || []);
+    self.hasMarker = ko.observable(false);
+    self.markers = ko.observableArray();
+    self.hasInfoWindow = ko.observable(false);
+    self.infoWindows = ko.observableArray()
+    self.visible = ko.observable(true);
+    self.wikiDisplay = ko.observable("");
+    self.map = map;
 };
 Location.prototype = Object.create(Object.prototype);
 Location.prototype.constructor = Location;
 
+Location.prototype.addMarker = function (data) {
+    var self = this;
+    if (data.status == google.maps.GeocoderStatus.OK) {
+        for (var i = data.results.length - 1; i >= 0; i--) {
+            if (data.results[i].geometry.location_type == "ROOFTOP"){
+                var marker = google.maps.Marker({
+                    position: data.results.geometry.location,
+                    draggable: false,
+                    animation: google.maps.Animation.DROP,
+                    title: self.name()
+                });
+                self.addInfoWindow(marker);
+                self.markers().push(marker);
+                self.hasMarker(true);
+                return 0;
+            }
+        }
+    } else {
+        console.log("Error trying to access the Geocoder. Status:", data.status);
+    }
+
+    return -1;
+};
+
+Location.prototype.addInfoWindow = function(marker) {
+    var self = this;
+    var infoWinder = new google.maps.InfoWindow({content: self.wikiDisplay()});
+    marker.addListener('click', function() {
+        infoWinder.open(self.map, marker);
+    });
+    infoWinder.addListener('closeclick', function() {
+        infoWinder.setMarker(null);
+    });
+    self.infoWindows().push(infoWinder);
+
+};
+
+Location.prototype.isVisible = function(isIt) {
+    var self = this;
+    self.visible(isIt);
+    if (isIt) {
+        for (var i = self.markers().length - 1; i >= 0; i--) {
+            self.markers()[i].setMap(self.map);
+        }
+    } else {
+        for (var it = self.markers().length - 1; it >= 0; it--) {
+            self.markers()[it].setMap(null);
+        }
+    }
+};
+
 Location.prototype.search = function(partial) {
     var self = this;
-    if (self.name.toLowerCase().includes(partial)) {
-        self.visible(true);
+    if (self.name().toLowerCase().includes(partial)) {
+        self.isVisible(true);
         return true;
     } else {
-        for (var i = self.keywords.length - 1; i >= 0; i--) {
-            if(self.keywords[i].toLowerCase().includes(partial)) {
+        for (var i = self.keywords().length - 1; i >= 0; i--) {
+            if(self.keywords()[i].toLowerCase().includes(partial)) {
+                self.isVisible(true);
                 return true;
             }
         }
-        self.visible = false;
+        self.isVisible(false);
         return false;
     }
 };
 
 // Sets wikiDisplay in addition to website URL
-Location.prototype.wikiGet = function() {
+Location.prototype.wikiGet = function(geo) {
     var self = this;
     var baseurl = 'https://en.wikipedia.org/w/api.php';
     var content = '<h3>%TITLE%</h3><p>%DESCRIPTION</p><p>Find out more <a href="%WIKIURL%">here</a> at Wikipedia or <a href="%WEBURL%">here</a> at the home page.</p>';
 
     $.ajax({
-        url: baseurl + '?action=opensearch&search=' + self.name + '&format=json',
+        url: baseurl + '?action=opensearch&search=' + self.name() + '&format=json',
         type: 'GET',
         dataType: 'jsonp'
         })
@@ -235,30 +291,34 @@ Location.prototype.wikiGet = function() {
             // TODO: Look up format type and enter it to replace the Title, description, wikiurl, and website url
             // content = content.replace('%TITLE%', );
             content = content.replace('%WEBURL%', self.website);
-            if (self.wiki != "none") {
+            if (self.wiki() != "none") {
                 for (var i = data[3].length - 1; i >= 0; i--) {
-                    if( data[3][i] == self.wiki ){
+                    if( data[3][i] == self.wiki() ){
                         content = content.replace('%DESCRIPTION%', data[2][i]);
                         content = content.replace('%WIKIURL%', self.wiki);
-                        self.wikiDisplay = content;
+                        self.wikiDisplay(content);
                         break;
                     }
                 }
             } else {
                 var failed = '<h3>%NAME%</h3><p>Could not find any data from Wikipedia from this location but you can go to the website <a href="%WEBURL%">here</a></p>';
-                failed = failed.replace('%NAME%', self.name);
-                failed = failed.replace('%WEBURL%', self.website);
-                self.wikiDisplay = failed;
+                failed = failed.replace('%NAME%', self.name());
+                failed = failed.replace('%WEBURL%', self.website());
+                self.wikiDisplay(failed);
             }
         })
         .fail(function (data) {
             var failed = '<h3>%NAME%</h3><p>Could not find any data from Wikipedia from this location but you can go to the website <a href="%WEBURL%">here</a></p>';
-            failed = failed.replace('%NAME%', self.name);
-            failed = failed.replace('%WEBURL%', self.website);
-            self.wikiDisplay = failed;
+            failed = failed.replace('%NAME%', self.name());
+            failed = failed.replace('%WEBURL%', self.website());
+            self.wikiDisplay(failed);
         })
         .always(function (data) {
-            console.log("Complete");
+
+            // for (var i = self.address().length - 1; i >= 0; i--) {
+            //     geo.geocode({ address: self.address()[i]}, self.addMarker);
+            // }
+            console.log("Complete:", self.wikiDisplay());
         });
 };
 
@@ -268,15 +328,36 @@ function MainViewModel(jsonFile) {
 
     self.currencies = ['USD', 'CHF', 'GBP', 'AUD', 'CAD', 'CZK'];
 
+
     /*TODO: View part for the Map*/
     self.Rome = {lat: 41.9, lng: 12.5};
     self.map = new google.maps.Map(document.getElementById('romeMap'), {
         zoom: 12,
         center: self.Rome
     });
-    self.placeService = new google.maps.places.PlacesService(self.map);
+    self.latLngFinder = new google.maps.Geocoder();
+    // TODO: Create ObservableArray of each Location from the jsonFile
+    self.Locale = Location(jsonFile['rome-app'][0],self.map);
 
-    /*TODO: View part for marker*/
+    // for (var i = self.Locations.length - 1; i >= 0; i--) {
+    //     self.Locations[i].wikiGet();
+    // }
+    console.log("before wikiGet()");
+    self.Locale.wikiGet(self.latLngFinder);
+    console.log("after wikiGet()");
+
+    self.setView = function (view) {
+        if (true) {
+            var bounds = new google.maps.LatLngBounds();
+            for (var y = self.Locale.markers.length - 1; y >= 0; y--) {
+                bounds.extend(self.Locale.markers[y].position);
+            }
+            self.Locale.isVisible(true);
+            self.map.fitBounds(bounds);
+        }
+    };
+
+    self.setView();
 
 
 
@@ -289,6 +370,4 @@ function initialize() {
 }
 function initD() {
     google.maps.event.addDomListener(window, "load", initialize);
-    console.log("Runs on ready!");
-    console.log("BUTTHEAD");
 }

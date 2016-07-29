@@ -12,7 +12,7 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
-        <a href="#" class="navbar-brand">
+        <a href="#" class="navbar-brand" data-bind="click: function(){setView(2)">
             <img src="img/image/rome-brand.png" alt="Rome Travel App" class="responsive-img">
         </a>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -25,9 +25,9 @@
 
       <div class="navbar-collapse collapse text-center" id="navbar" aria-expanded="false" style="height:1px">
         <ul class="nav navbar-nav center">
-          <li><a href="#infoCenter">Information</a></li>
-          <li><a href="#transCenter">Transportation Centers</a></li>
-          <li><a href="#historical">Historical Landmarks</a></li>
+          <li><a href="#infoCenter" data-bind="click: function(){$root.setView(1)">Information</a></li>
+          <li><a href="#transCenter" data-bind="click: function(){$root.setView(3)">Transportation Centers</a></li>
+          <li><a href="#historical" data-bind="click: function(){$root.setView(0)">Historical Landmarks</a></li>
           <li><a href="#currencies" data-toggle="modal" data-target="#currencies">Currency Conversions</a></li>
           <li><a href="#aboutme" data-toggle="modal" data-target="#aboutme" >About Me</a></li>
         </ul>
@@ -96,8 +96,11 @@
   <div id="romeMap">
 
   </div>
-
+  <script src="js/jquery.min.js"></script>
+  <script src="js/underscore-min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/knockout.js"></script>
   <script src="js/appd.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEEw5UpeUtfxbjbM28mAcy8LJfPxTLANg&libraries=places&callback=initD" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEEw5UpeUtfxbjbM28mAcy8LJfPxTLANg&callback=initMap" async defer></script>
 </body>
 </html>

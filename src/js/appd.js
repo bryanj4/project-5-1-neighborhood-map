@@ -279,12 +279,17 @@ Location.prototype.isVisible = function(isIt) {
 
 Location.prototype.search = function(partial) {
     var self = this;
-    if (self.name.toLowerCase().includes(partial)) {
+    var partiald = partial.toLowerCase();
+    if (partiald.length === 0) {
+        self.isVisible(true);
+        return true;
+    }
+    if (self.name.toLowerCase().includes(partiald)) {
         self.isVisible(true);
         return true;
     } else {
         for (var i = self.keywords.length - 1; i >= 0; i--) {
-            if(self.keywords[i].toLowerCase().includes(partial)) {
+            if(self.keywords[i].toLowerCase().includes(partiald)) {
                 self.isVisible(true);
                 return true;
             }
@@ -357,12 +362,10 @@ var LocContainer = function (jsonData, map) {
     var self = this;
     self.map = map;
     self.locations = ko.observableArray();
-    // for (var i = 0; i < jsonData['rome-app'].length; i++) {
-    //     self.locations.push(new Location(self.map, jsonData['rome-app'][i]));
-    // }
     jsonData['rome-app'].forEach(function (item) {
         self.locations.push(new Location(self.map, item));
     });
+    // self.active
 };
 
 LocContainer.prototype = Object.create(Object.prototype);
@@ -406,7 +409,7 @@ function MainViewModel(jsonFile) {
     /*DONE: View part for the Map*/
     self.Rome = {lat: 41.9, lng: 12.5};
     self.map = new google.maps.Map(document.getElementById('romeMap'), {
-        zoom: 12,
+        zoom: 13,
         center: self.Rome,
         clickableIcons: false
     });

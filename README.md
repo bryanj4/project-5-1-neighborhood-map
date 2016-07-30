@@ -1,15 +1,54 @@
-<!-- TODO: need to add instructions on how to run application or I need to tell them to go to a certain website to see it run -->
+# Rome Travel App #
 
-How will I complete this Project?
+##### Synopsis #####
+The Rome Travel App will provide you with some interesting destinations and information about the most important places to visit in Rome.
 
-1. Review our course JavaScript Design Patterns.
-2. Download the Knockout framework. Knockout must be used to handle list, filter, and any other information on the page that is subject to changing state. Things that should not be handled by knockout: anything the map api is used for, creating markers, tracking their click events, making the map, refreshing the map.
-3. Write code required to add a full-screen map to your page using the Google Maps API. For sake of efficiency, the map API should be called only once.
-4. Write code required to display map markers identifying at least 5 locations that you are interested in within this neighborhood. Your app should display those locations by default when the page is loaded.
-5. Implement a list view of the set of locations defined in step 4.
-6. Provide a filter option that uses an input field to filter both the list view and the map markers displayed by default on load. The list view and the markers should update accordingly in real-time. Providing a search function through a third-party API is not enough to meet specifications.
-7. Add functionality using third-party APIs to provide information when a map marker or list view entry is clicked (ex. Yelp reviews, Wikipedia, Flickr images, etc). Note that StreetView and Places don't count as an additional 3rd party API because they are libraries included in the Google Maps API. If you need a refresher on making AJAX requests to third-party servers, check out our Intro to AJAX course.
-8. Add functionality to animate a map marker when either the list item associated with it or the map marker itself is selected.
-9. Add functionality to open an infoWindow with the information described in step 7 when either a location is selected from the list view or its map marker is selected directly.
-10. The app's interface should be intuitive to use. For example, the input text area to filter locations should be easy to locate. It should be easy to understand what set of locations is being filtered. Selecting a location via list item or map marker should cause the map marker to bounce or in some other way animate to indicate that the location has been selected and associated info window should open above map marker with additional information.
-11. Error Handling: In case of error (e.g. in a situation where a third party api does not return the expected result) we expect your webpage to do one of the following: A message is displayed notifying the user that the data can't be loaded, OR There are no negative repercussions to the UI. Note: Please note that we expect students to handle errors if the browser has trouble initially reaching the 3rd-party site as well. For example, imagine a user is using your neighborhood map, but her firewall prevents her from accessing the Instagram servers. Here is a reference article on how to block websites with the hosts file. It is important to handle errors to give users a consistent and good experience with the webpage. Read this blogpost to learn more .Some JavaScript libraries provide special methods to handle errors. For example: refer to .fail() method discussed here if you use jQuery's ajax() method. We strongly encourage you to explore ways to handle errors in the library you are using to make API calls.
+
+### Table of Contents ###
+* [Dependencies](#dependencies)
+* [Installation](#installation)
+* [How to Run](#how-to-run)
+* [About](#about)
+* [Attribution](#attribution)
+
+
+
+## Dependencies ##
+You will need the programs listed below in order to install and run the web app:
+
+* A modern Web Browser (Chrome)
+* Git
+* Node.js and these NPM packages installed globally
+    * Gulp.js
+    * Bower.js
+
+
+## Installation ##
+
+~~~
+git clone https://github.com/bryanj4/project-5-1-neighborhood-map.git
+cd project-5-1-neighborhood-map
+npm install
+~~~
+
+
+## How to Run ##
+~~~
+cd /abspath/project-5-1-neighborhood-map
+gulp serve
+~~~
+Usually a browser will pop up with page otherwise just copy the link in the terminal and open it up in a browser.
+
+
+## About ##
+If you need to reset the view back to show all markers then press the Purple **R** at the top left portion of the screen.
+
+You can press the descriptive button above to get the desired marker view. You can also Press the *Currency Conversion* button for the current exchange rate from a list of well used currencies (**Uses third party API**). Press the *About* button for a description of the App.
+
+You can also filter the markers based on the name of the location as well as pre-defined keywords to make sure you find the place you are looking for.
+
+When you click on a marker then you should get a pop up InfoWindow which has the known Wikipedia description (**Wikipedia API**) along with a link to the official website.
+
+
+## Attribution ##
+I received some help from a Udacity tutor, Karol, from Germany. I also attributed sources throughout the code.

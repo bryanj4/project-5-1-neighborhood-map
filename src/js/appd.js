@@ -108,10 +108,10 @@ var locationData = {
         "point"
     ]
     }, {
-    "name":"Termini Station",
+    "name":"Roma Termini",
     "address": ["Roma Termini, Italy"],
     "website":"http://www.trenitalia.com/tcom-en",
-    "wiki": "none",
+    "wiki": "https://en.wikipedia.org/wiki/Roma_Termini_railway_station",
     "type": 3,
     "keywords": [
         "trains",
@@ -324,6 +324,12 @@ Location.prototype.wikiGet = function(geo) {
                         self.wikiDisplay = content;
                         break;
                     }
+                }
+                if (self.wikiDisplay.length === 0) {
+                    content = content.replace('%TITLE%', data[1][0]);
+                    content = content.replace('%DESCRIPTION%', data[2][0]);
+                    content = content.replace('%WIKIURL%', self.wiki);
+                    self.wikiDisplay = content;
                 }
             } else {
                 var failed = '<h3>%NAME%</h3><p>Could not find any data from '

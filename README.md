@@ -29,6 +29,7 @@ You will need the programs listed below in order to install and run the web app:
 git clone https://github.com/bryanj4/project-5-1-neighborhood-map.git
 cd project-5-1-neighborhood-map
 npm install
+bower install
 ~~~
 
 

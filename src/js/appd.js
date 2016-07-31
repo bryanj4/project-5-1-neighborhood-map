@@ -480,5 +480,5 @@ function initMap() {
 function googleError() {
     var map = $('#romeMap');
     console.log('onError runs!');
-    map.text("<h1>Error Loading Google Maps!!!</h1><p>Please contact Jacob Bryan at jake@jakebryan.me for assistance in fixing the problem!</p>");
+    map.text("<div id='googleError'><h1>Error Loading Google Maps!!!</h1><p>Please contact Jacob Bryan at jake@jakebryan.me for assistance in fixing the problem!</p></div>");
 }

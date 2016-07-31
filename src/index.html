@@ -6,6 +6,7 @@
   <meta name="author" content="Jacob Bryan">
   <meta name="email" content="jake@jakebryan.me">
   <link rel="stylesheet" href="css/style.css">
+  <title>Rome Travel App</title>
 </head>
 <body>
 
@@ -81,15 +82,36 @@
           <div class="modal-body text-center">
           <p>The Base Currency is Euros since Rome's official currency is Euros. Below you will find the up to date currecy conversion for common currencies to 1 Euro</p>
           <table id="currenciesTarget" align="center" class="table table-bordered">
-            <tr>
-              <td>Currency</td>
-              <td>Ratio</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Currency</th>
+                <th>Ratio</th>
+              </tr>
+            </thead>
+            <tbody data-bind="foreach: $root.currencies()">
+              <tr>
+                <td data-bind="text: name"></td>
+                <td data-bind="text: value"></td>
+              </tr>
+            </tbody>
+
           </table>
+          <p data-bind="text: $root.status"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hovering-list-view">
+    <div class="list-group" data-bind="foreach: container().locations">
+      <div data-bind="if: visible()">
+        <button class="list-group-item" data-bind="click: setFocus, hasFocus: unsetFocus">
+          <h4 class="list-group-item-heading" data-bind="text: name"></h4>
+          <p class="list-group-item-text" data-bind="text: address"></p>
+        </button>
       </div>
     </div>
   </div>
@@ -102,6 +124,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/knockout.js"></script>
   <script src="js/appd.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEEw5UpeUtfxbjbM28mAcy8LJfPxTLANg&callback=initMap" async defer></script>
+  <!-- Help for error handling of GMaps found here: https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282 -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEEw5UpeUtfxbjbM28mAcy8LJfPxTLANg&callback=initMap" onerror="googleError()" async defer></script>
 </body>
 </html>

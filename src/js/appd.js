@@ -136,42 +136,7 @@ var locationData = {
 };
 
 
-
-
-function fixerio_update(currencies) {
-    jQuery.getJSON('http://api.fixer.io/latest', function(data) { // EUR is the default base. See fixer.io
-        var idTemplate = "#%CURRENCY%-data";
-        var tempId;
-        for (var i = 0; i < currencies.length; i++) {
-            tempId = idTemplate.replace("%CURRENCY%", currencies[i]);
-            $(tempId).text(data.rates[currencies[i]]);
-        }
-        setTimeout(fixerio_update, 300000, currencies);
-    });
-}
-
-function fixerio_api(currencies) {
-    jQuery.getJSON('http://api.fixer.io/latest', function(data) { // EUR is the default base. See fixer.io
-        var currency = $('#currenciesTarget');
-        var template = "<tr><td>%CURRENCY%</td><td id=\"%CURRENCY%-data\"></td></tr>";
-        var template1 = "<tr><td>%CURRENCY%</td><td>%AMOUNT%</td></tr>";
-        var idTemplate = "#%CURRENCY%-data";
-        var temp = template1.replace("%CURRENCY%", data.base);
-        var tempId = idTemplate;
-        temp = temp.replace("%AMOUNT%", "1.00");
-        currency.append(temp);
-        for (var i = 0; i < currencies.length; i++) {
-            temp = template.replace("%CURRENCY%", currencies[i]);
-            temp = temp.replace("%CURRENCY%", currencies[i]);
-            tempId = idTemplate.replace("%CURRENCY%", currencies[i]);
-            currency.append(temp);
-            $(tempId).text(data.rates[currencies[i]]);
-        }
-        setTimeout(fixerio_update, 300000, currencies);
-    });
-}
-
-var Location = function( map, initData) {
+var Location = function( map, initData, infoWindow) {
     var self = this;
     self.name =  initData.name || '' ;
     self.address = initData.address || [];
@@ -186,15 +151,30 @@ var Location = function( map, initData) {
                                      */
     self.website = initData.website || '';
     self.keywords = initData.keywords || [];
-    self.hasMarker = false;
+    self.hasMarker = ko.observable(false);
     self.markers = [];
-    self.hasInfoWindow = false;
-    self.visible = true;
+    self.visible = ko.observable(true);
     self.wikiDisplay = "";
     self.map = map;
+    self.info = infoWindow;
 };
 Location.prototype = Object.create(Object.prototype);
 Location.prototype.constructor = Location;
+
+Location.prototype.setFocus = function() {
+    var self = this;
+    google.maps.event.trigger(self.markers[0], 'click');
+    // console.log("Ran thru set Focus");
+};
+
+Location.prototype.unsetFocus = function (foc) {
+    var self = this;
+    if (!foc) {
+        google.maps.event.trigger(self.markers[0], 'click');
+    }
+
+    console.log("Ran thru unset Focus");
+};
 
 Location.prototype.addMarker = function (data, status) {
     var self = this;
@@ -231,10 +211,7 @@ Location.prototype.addMarker = function (data, status) {
         // Originally I had multiple address for the tourist information center
         // but due to a geocoder error I decided to only go with one so I would
         // only need one InfoWindow per Location
-        if (!self.hasInfoWindow) {
-            self.infoWindow = new google.maps.InfoWindow({content: self.wikiDisplay});
-            self.hasInfoWindow = true;
-        }
+
         var lenMark = self.markers.length - 1;
 
         // Adding opening of InfoWindow on a click event along with an animation.
@@ -243,18 +220,19 @@ Location.prototype.addMarker = function (data, status) {
 
             if (self.markers[lenMark].getAnimation() !== null) {
                 self.markers[lenMark].setAnimation(null);
-                self.infoWindow.close();
+                self.info.close();
             } else {
                 self.markers[lenMark].setAnimation(google.maps.Animation.BOUNCE);
-                self.infoWindow.open(self.map, self.markers[lenMark]);
+                self.info.setContent(self.wikiDisplay);
+                self.info.open(self.map, self.markers[lenMark]);
             }
         });
-        self.infoWindow.addListener('closeclick', function() {
-            self.infoWindow.close();
+        self.info.addListener('closeclick', function() {
+            self.info.close();
             self.markers[lenMark].setAnimation(null);
         });
 
-        self.hasMarker = true;
+        self.hasMarker(true);
         return 0;
     } else {
         console.log("Error trying to access the Geocoder. Status:", status);
@@ -265,7 +243,7 @@ Location.prototype.addMarker = function (data, status) {
 
 Location.prototype.isVisible = function(isIt) {
     var self = this;
-    self.visible = isIt;
+    self.visible(isIt);
     if (isIt) {
         for (var i = self.markers.length - 1; i >= 0; i--) {
             self.markers[i].setMap(self.map);
@@ -276,6 +254,8 @@ Location.prototype.isVisible = function(isIt) {
         }
     }
 };
+
+
 
 Location.prototype.search = function(partial) {
     var self = this;
@@ -364,12 +344,12 @@ Location.prototype.wikiGet = function(geo) {
         });
 };
 
-var LocContainer = function (jsonData, map) {
+var LocContainer = function (jsonData, map, infoWindow) {
     var self = this;
     self.map = map;
     self.locations = ko.observableArray();
     jsonData['rome-app'].forEach(function (item) {
-        self.locations.push(new Location(self.map, item));
+        self.locations.push(new Location(self.map, item, infoWindow));
     });
     // self.active
 };
@@ -406,22 +386,36 @@ LocContainer.prototype.search = function(stringy) {
     }
 };
 
+
+
+
+
+var Currency = function (name, value) {
+    var self = this;
+    self.name = ko.observable(name || 'USD');
+    self.value = ko.observable(value || 0.0);
+};
+
+Currency.prototype = Object.create(Object.prototype);
+Currency.prototype.constructor = Currency;
+
 function MainViewModel(jsonFile) {
     var self = this;
 
-    self.currencies = ['USD', 'CHF', 'GBP', 'AUD', 'CAD', 'CZK'];
+    self.currencies = ko.observableArray([new Currency('EUR', 1.0), new Currency('USD', 0), new Currency('CHF', 0), new Currency('GBP', 0), new Currency('AUD', 0), new Currency('CAD', 0), new Currency('CZK', 0)]);
     self.searchTerm = ko.observable("");
+    self.status = ko.observable("");
 
     /*DONE: View part for the Map*/
     self.Rome = {lat: 41.9, lng: 12.5};
     self.map = new google.maps.Map(document.getElementById('romeMap'), {
         zoom: 13,
-        center: self.Rome,
-        clickableIcons: false
+        center: self.Rome
     });
+    self.infoWindow = new google.maps.InfoWindow({zIndex: 2});
     self.latLngFinder = new google.maps.Geocoder();
     // DONE: Create ObservableArray of each Location from the jsonFile
-    self.container = ko.observable(new LocContainer(jsonFile, self.map));
+    self.container = ko.observable(new LocContainer(jsonFile, self.map, self.infoWindow));
 
     self.container().wikiGets(self.latLngFinder);
 
@@ -434,6 +428,41 @@ function MainViewModel(jsonFile) {
         console.log(self.searchTerm());
     };
 
+    self.fixerio_update = function() {
+        jQuery.getJSON('http://api.fixer.io/latest', function(data) { // EUR is the default base. See fixer.io
+            for (var i = 0; i < self.currencies().length; i++) {
+                if (self.currencies()[i].name() == "EUR") {
+                    self.currencies()[i].value(1.0);
+                } else {
+                    self.currencies()[i].value(data.rates[self.currencies()[i].name()]);
+                }
+            }
+            self.status("Passing Ajax Request.");
+            setTimeout(self.fixerio_update, 300000);
+        }).fail(function () {
+            self.status("Failing Ajax Request. Sticking to last known exchange rate");
+        });
+    };
+
+    self.fixerio_api = function () {
+        jQuery.getJSON('http://api.fixer.io/latest', function(data) { // EUR is the default base. See fixer.io
+
+            for (var i = 0; i < self.currencies().length; i++) {
+                if (self.currencies()[i].name() == "EUR") {
+                    self.currencies()[i].value(1.0);
+                } else {
+                    // console.log(data.rates[self.currencies()[i].name()]);
+                    self.currencies()[i].value(data.rates[self.currencies()[i].name()]);
+                }
+            }
+            self.status("Passing Ajax Request.");
+            setTimeout(self.fixerio_update, 300000);
+        }).fail(function () {
+            self.status("Failing Ajax Request. Sticking to last known exchange rate");
+        });
+    };
+    self.fixerio_api();
+
     self.setView(0);
 
 
@@ -441,10 +470,15 @@ function MainViewModel(jsonFile) {
 var main;
 function initialize() {
     main = new MainViewModel(locationData);
-    fixerio_api(main.currencies);
     ko.applyBindings(main);
 }
 function initMap() {
     google.maps.event.addDomListener(window, "load", initialize);
     // console.log("running initD...");
+}
+
+function googleError() {
+    var map = $('#romeMap');
+    console.log('onError runs!');
+    map.text("<h1>Error Loading Google Maps!!!</h1><p>Please contact Jacob Bryan at jake@jakebryan.me for assistance in fixing the problem!</p>");
 }

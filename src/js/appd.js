@@ -283,13 +283,22 @@ Location.prototype.search = function(partial) {
 Location.prototype.wikiGet = function(geo) {
     var self = this;
     var baseurl = 'https://en.wikipedia.org/w/api.php';
-
+    var wikiRequestTimeout = setTimeout(function () {
+        console.log("Failed AJAX request");
+        var failed = '<h3>%NAME%</h3><p>Could not find any data from '
+            + 'Wikipedia from this location but you can go to the website '
+            + '<a href="%WEBURL%">here</a></p>';
+        failed = failed.replace('%NAME%', self.name);
+        failed = failed.replace('%WEBURL%', self.website);
+        self.wikiDisplay = failed;
+    }, 5000);
     $.ajax({
         url: baseurl + '?action=opensearch&search=' + self.name + '&format=json',
         type: 'GET',
         dataType: 'jsonp'
         })
         .done(function(data) {
+            clearTimeout(wikiRequestTimeout);
             // DONE: Look up format type and enter it to replace the Title, description, wikiurl, and website url
             var content = '<h3>%TITLE%</h3><p>%DESCRIPTION%</p><p>Find out more'
             + ' <a href="%WIKIURL%">here</a> at Wikipedia or <a href="%WEBURL%"'
@@ -480,5 +489,5 @@ function initMap() {
 function googleError() {
     var map = $('#romeMap');
     console.log('onError runs!');
-    map.text("<div id='googleError'><h1>Error Loading Google Maps!!!</h1><p>Please contact Jacob Bryan at jake@jakebryan.me for assistance in fixing the problem!</p></div>");
+    map.html("<div id='googleError'><h1>Error Loading Google Maps!!!</h1><p>Please contact Jacob Bryan at jake@jakebryan.me for assistance in fixing the problem!</p></div>");
 }

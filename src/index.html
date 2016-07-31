@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -53,7 +53,7 @@
     </div>
   </nav>
 
-  <div id="aboutme" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="aboutMeLabel">
+  <div id="aboutme" class="modal fade" tabindex="-1" role="dialog">
     <!-- About Me Section Pop up Transfer this to Modal-->
     <div class="modal-dialog">
         <div class="modal-content">
@@ -108,10 +108,10 @@
   <div id="hovering-list-view">
     <div class="list-group" data-bind="foreach: container().locations">
       <div data-bind="if: visible()">
-        <button class="list-group-item" data-bind="click: setFocus, hasFocus: unsetFocus">
+        <a class="list-group-item" data-bind="click: setFocus, hasFocus: unsetFocus">
           <h4 class="list-group-item-heading" data-bind="text: name"></h4>
           <p class="list-group-item-text" data-bind="text: address"></p>
-        </button>
+        </a>
       </div>
     </div>
   </div>

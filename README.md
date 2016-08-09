@@ -21,6 +21,7 @@ You will need the programs listed below in order to install and run the web app:
 * Node.js and these NPM packages installed globally
     * Gulp.js
     * Bower.js
+* Google Maps Javascript API Key - Enable most or all of the APIs
 
 
 ## Installation ##
@@ -31,6 +32,7 @@ cd project-5-1-neighborhood-map
 npm install
 bower install
 ~~~
+After you install of the dependencies, then you need to place your API key into the src/index.html file and replace the current key with you key. Once you do that then the Rome Map App will work.
 
 
 ## How to Run ##

@@ -42,6 +42,7 @@ gulp serve
 ~~~
 Usually a browser will pop up with page otherwise just copy the link in the terminal and open it up in a browser.
 
+You may also view a live version at [my Github Pages site](http://bryanj.github.io/olderstuff/UdacityProjects/project-5-1-neighborhood-map/dist/index.html) or at my [personal website](http://files.jakebryan.me/olderstuff/UdacityProjects/project-5-1-neighborhood-map/dist/index.html).
 
 ## About ##
 If you need to reset the view back to show all markers then press the Purple **R** at the top left portion of the screen.
